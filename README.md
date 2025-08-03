@@ -39,7 +39,7 @@ src/main/java/com/udb/letrasvivas/bookapi/
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/franc1sc0sv/LetrasVivasBookAPI
 cd LetrasVivasBookAPI
 ```
 
@@ -290,9 +290,7 @@ This project is created for educational purposes as part of the POO course at Un
 
 ## 👥 Team
 
-- [Your Name] - [Your Student ID]
-- [Team Member 2] - [Student ID]
-- [Team Member 3] - [Student ID]
+- Francisco Hernandez - HM242655
 
 ---
 
