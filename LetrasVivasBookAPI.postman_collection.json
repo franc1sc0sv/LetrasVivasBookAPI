@@ -1,0 +1,293 @@
+{
+  "info": {
+    "_postman_id": "letras-vivas-book-api",
+    "name": "Letras Vivas Book API",
+    "description": "Complete collection to test the Letras Vivas Book API REST endpoints\n\nThis collection includes all available endpoints:\n- GET /api/books - Get all books\n- GET /api/books/{id} - Get book by ID\n- GET /api/books/search - Search books by title\n- POST /api/books - Create new book\n- PUT /api/books/{id} - Update book\n- DELETE /api/books/{id} - Delete book\n\nConfiguration:\n- Base URL: http://localhost:8081\n- Application Port: 8081\n- Database Port: 5433",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Books",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/books",
+          "host": ["{{base_url}}"],
+          "path": ["api", "books"]
+        },
+        "description": "Retrieves all books available in the catalog"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Book by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/books/1",
+          "host": ["{{base_url}}"],
+          "path": ["api", "books", "1"]
+        },
+        "description": "Retrieves a specific book by its ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Search Books by Title",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/books/search?title=Quixote",
+          "host": ["{{base_url}}"],
+          "path": ["api", "books", "search"],
+          "query": [
+            {
+              "key": "title",
+              "value": "Quixote",
+              "description": "Title or part of the title to search for"
+            }
+          ]
+        },
+        "description": "Searches for books containing the specified title"
+      },
+      "response": []
+    },
+    {
+      "name": "Create New Book",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Don Quixote\",\n  \"author\": \"Miguel de Cervantes\",\n  \"publicationYear\": 1605\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/books",
+          "host": ["{{base_url}}"],
+          "path": ["api", "books"]
+        },
+        "description": "Creates a new book in the catalog\n\nValidations:\n- title: Required, cannot be blank\n- author: Required, cannot be blank\n- publicationYear: Required, must be 1000 or greater"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Book - The Great Gatsby",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"The Great Gatsby\",\n  \"author\": \"F. Scott Fitzgerald\",\n  \"publicationYear\": 1925\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/books",
+          "host": ["{{base_url}}"],
+          "path": ["api", "books"]
+        },
+        "description": "Creates another example book"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Book - 100 Years of Solitude",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"One Hundred Years of Solitude\",\n  \"author\": \"Gabriel García Márquez\",\n  \"publicationYear\": 1967\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/books",
+          "host": ["{{base_url}}"],
+          "path": ["api", "books"]
+        },
+        "description": "Creates another example book"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Book",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Don Quixote de la Mancha\",\n  \"author\": \"Miguel de Cervantes Saavedra\",\n  \"publicationYear\": 1605\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/books/1",
+          "host": ["{{base_url}}"],
+          "path": ["api", "books", "1"]
+        },
+        "description": "Updates an existing book by its ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Book",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/books/1",
+          "host": ["{{base_url}}"],
+          "path": ["api", "books", "1"]
+        },
+        "description": "Deletes a book by its ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Test Validation - Empty Title",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"\",\n  \"author\": \"Test Author\",\n  \"publicationYear\": 2000\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/books",
+          "host": ["{{base_url}}"],
+          "path": ["api", "books"]
+        },
+        "description": "Tests validation with empty title - should return 400 error"
+      },
+      "response": []
+    },
+    {
+      "name": "Test Validation - Invalid Year",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Test Book\",\n  \"author\": \"Test Author\",\n  \"publicationYear\": 999\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/books",
+          "host": ["{{base_url}}"],
+          "path": ["api", "books"]
+        },
+        "description": "Tests validation with invalid year - should return 400 error"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Non-existent Book",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/books/999",
+          "host": ["{{base_url}}"],
+          "path": ["api", "books", "999"]
+        },
+        "description": "Tests getting a book that doesn't exist - should return 404"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Non-existent Book",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/books/999",
+          "host": ["{{base_url}}"],
+          "path": ["api", "books", "999"]
+        },
+        "description": "Tests deleting a book that doesn't exist - should return 404"
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8081",
+      "type": "string",
+      "description": "Base URL for the API"
+    }
+  ]
+}

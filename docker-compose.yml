@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:15
+    container_name: letras_postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME:-letras_db}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - letras_data:/var/lib/postgresql/data
+    networks:
+      - letras_net
+
+volumes:
+  letras_data:
+
+networks:
+  letras_net:
