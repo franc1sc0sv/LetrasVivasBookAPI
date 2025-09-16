@@ -5,6 +5,10 @@ import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.servers.Server;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.tags.Tag;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,12 +26,13 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("Letras Vivas Book API")
-                        .description("API RESTful para la gestión de libros en Letras Vivas. "
-                                + "Permite crear, leer, actualizar y eliminar libros del catálogo.")
-                        .version("1.0.0")
+                        .description("A comprehensive RESTful API for managing books in the Letras Vivas library system. "
+                                + "This API provides full CRUD operations, advanced search capabilities, pagination, "
+                                + "and comprehensive validation. Built with Spring Boot, Hibernate, and OpenAPI documentation.")
+                        .version("2.0.0")
                         .contact(new Contact()
-                                .name("Equipo de Desarrollo UDB")
-                                .email("desarrollo@udb.edu.sv")
+                                .name("UDB Development Team")
+                                .email("development@udb.edu.sv")
                                 .url("https://www.udb.edu.sv"))
                         .license(new License()
                                 .name("MIT License")
@@ -35,10 +40,28 @@ public class OpenApiConfig {
                 .servers(List.of(
                         new Server()
                                 .url("http://localhost:" + serverPort)
-                                .description("Servidor de Desarrollo"),
+                                .description("Development Server"),
                         new Server()
                                 .url("https://api.letrasvivas.udb.edu.sv")
-                                .description("Servidor de Producción")
-                ));
+                                .description("Production Server")
+                ))
+                .tags(List.of(
+                        new Tag()
+                                .name("Book Management")
+                                .description("Operations for managing books in the library catalog"),
+                        new Tag()
+                                .name("Search & Discovery")
+                                .description("Advanced search and filtering capabilities"),
+                        new Tag()
+                                .name("Statistics")
+                                .description("Library statistics and analytics")
+                ))
+                .components(new Components()
+                        .addSecuritySchemes("bearerAuth", new SecurityScheme()
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")
+                                .description("JWT token authentication")))
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
     }
 }

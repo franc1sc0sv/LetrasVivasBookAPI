@@ -1,269 +1,1074 @@
 {
   "info": {
-    "_postman_id": "letras-vivas-book-api",
-    "name": "Letras Vivas Book API",
-    "description": "Complete collection to test the Letras Vivas Book API REST endpoints\n\nThis collection includes all available endpoints:\n- GET /api/books - Get all books\n- GET /api/books/{id} - Get book by ID\n- GET /api/books/search - Search books by title\n- POST /api/books - Create new book\n- PUT /api/books/{id} - Update book\n- DELETE /api/books/{id} - Delete book\n\nConfiguration:\n- Base URL: http://localhost:8081\n- Application Port: 8081\n- Database Port: 5433",
+    "_postman_id": "letras-vivas-book-api-v2",
+    "name": "Letras Vivas Book API v2.0",
+    "description": "Complete collection to test the enhanced Letras Vivas Book API REST endpoints\n\nThis collection includes all available endpoints with advanced features:\n- GET /api/books - Get all books with pagination\n- GET /api/books/{id} - Get book by ID\n- GET /api/books/search - Advanced multi-criteria search\n- GET /api/books/search/title - Search books by title\n- GET /api/books/search/author - Search books by author\n- GET /api/books/statistics - Get book catalog statistics\n- POST /api/books - Create new book with comprehensive validation\n- PUT /api/books/{id} - Update existing book\n- PATCH /api/books/{id}/availability - Toggle book availability\n- DELETE /api/books/{id} - Delete book\n\nEnhanced Features:\n- Pagination and sorting\n- Advanced search with multiple criteria\n- Comprehensive validation\n- Professional error handling\n- Book statistics\n- Availability management\n\nConfiguration:\n- Base URL: http://localhost:8081\n- Application Port: 8081\n- Database Port: 5433",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Get All Books",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/api/books",
-          "host": ["{{base_url}}"],
-          "path": ["api", "books"]
+      "name": "Book Management",
+      "item": [
+        {
+          "name": "Get All Books (Paginated)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books?page=0&size=10&sortBy=title&sortDir=asc",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number (0-based)"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Number of items per page"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "title",
+                  "description": "Sort field (title, author, publicationYear, etc.)"
+                },
+                {
+                  "key": "sortDir",
+                  "value": "asc",
+                  "description": "Sort direction (asc, desc)"
+                }
+              ]
+            },
+            "description": "Retrieves all books with pagination and sorting capabilities"
+          },
+          "response": []
         },
-        "description": "Retrieves all books available in the catalog"
-      },
-      "response": []
+        {
+          "name": "Get Book by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "1"]
+            },
+            "description": "Retrieves a specific book by its ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create New Book (Complete)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"The Great Gatsby\",\n  \"author\": \"F. Scott Fitzgerald\",\n  \"publicationYear\": 1925,\n  \"description\": \"A classic American novel set in the Jazz Age\",\n  \"genre\": \"Fiction\",\n  \"pageCount\": 180,\n  \"price\": 12.99\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"]
+            },
+            "description": "Creates a new book with all available fields\n\nValidations:\n- title: Required, 1-255 chars, alphanumeric with punctuation\n- author: Required, 2-255 chars, alphabetic with spaces/hyphens\n- publicationYear: Required, 1000-2024\n- description: Optional, max 1000 chars\n- genre: Optional, max 50 chars, alphabetic\n- pageCount: Optional, 1-10000\n- price: Optional, 0.0-9999.99"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Book (Minimal)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Don Quixote\",\n  \"author\": \"Miguel de Cervantes\",\n  \"publicationYear\": 1605\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"]
+            },
+            "description": "Creates a book with only required fields"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Book",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"The Great Gatsby - Updated Edition\",\n  \"author\": \"F. Scott Fitzgerald\",\n  \"publicationYear\": 1925,\n  \"description\": \"An updated edition of the classic American novel\",\n  \"genre\": \"Fiction\",\n  \"pageCount\": 200,\n  \"price\": 15.99\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "1"]
+            },
+            "description": "Updates an existing book with new information"
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Book Availability",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/1/availability",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "1", "availability"]
+            },
+            "description": "Toggles the availability status of a book"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Book",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "1"]
+            },
+            "description": "Deletes a book by its ID"
+          },
+          "response": []
+        }
+      ],
+      "description": "Core CRUD operations for book management"
     },
     {
-      "name": "Get Book by ID",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/api/books/1",
-          "host": ["{{base_url}}"],
-          "path": ["api", "books", "1"]
+      "name": "Search & Discovery",
+      "item": [
+        {
+          "name": "Advanced Search (All Criteria)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/search?title=Fiction&author=Fitzgerald&genre=Fiction&minYear=1900&maxYear=2000&minPrice=10.00&maxPrice=50.00&isAvailable=true&page=0&size=10&sortBy=title&sortDir=asc",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "search"],
+              "query": [
+                {
+                  "key": "title",
+                  "value": "Fiction",
+                  "description": "Title to search for (partial match)"
+                },
+                {
+                  "key": "author",
+                  "value": "Fitzgerald",
+                  "description": "Author to search for (partial match)"
+                },
+                {
+                  "key": "genre",
+                  "value": "Fiction",
+                  "description": "Exact genre match"
+                },
+                {
+                  "key": "minYear",
+                  "value": "1900",
+                  "description": "Minimum publication year"
+                },
+                {
+                  "key": "maxYear",
+                  "value": "2000",
+                  "description": "Maximum publication year"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "10.00",
+                  "description": "Minimum price"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "50.00",
+                  "description": "Maximum price"
+                },
+                {
+                  "key": "isAvailable",
+                  "value": "true",
+                  "description": "Availability status"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Page size"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "title",
+                  "description": "Sort field"
+                },
+                {
+                  "key": "sortDir",
+                  "value": "asc",
+                  "description": "Sort direction"
+                }
+              ]
+            },
+            "description": "Advanced search with multiple criteria and pagination"
+          },
+          "response": []
         },
-        "description": "Retrieves a specific book by its ID"
-      },
-      "response": []
+        {
+          "name": "Search by Title Only",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/search?title=Gatsby&page=0&size=5",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "search"],
+              "query": [
+                {
+                  "key": "title",
+                  "value": "Gatsby",
+                  "description": "Title to search for"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                },
+                {
+                  "key": "size",
+                  "value": "5",
+                  "description": "Page size"
+                }
+              ]
+            },
+            "description": "Search books by title with pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Search by Author Only",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/search?author=Cervantes&page=0&size=5",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "search"],
+              "query": [
+                {
+                  "key": "author",
+                  "value": "Cervantes",
+                  "description": "Author to search for"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                },
+                {
+                  "key": "size",
+                  "value": "5",
+                  "description": "Page size"
+                }
+              ]
+            },
+            "description": "Search books by author with pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Search by Genre",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/search?genre=Fiction&page=0&size=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "search"],
+              "query": [
+                {
+                  "key": "genre",
+                  "value": "Fiction",
+                  "description": "Genre to filter by"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Page size"
+                }
+              ]
+            },
+            "description": "Search books by genre"
+          },
+          "response": []
+        },
+        {
+          "name": "Search by Price Range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/search?minPrice=10.00&maxPrice=20.00&page=0&size=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "search"],
+              "query": [
+                {
+                  "key": "minPrice",
+                  "value": "10.00",
+                  "description": "Minimum price"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "20.00",
+                  "description": "Maximum price"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Page size"
+                }
+              ]
+            },
+            "description": "Search books by price range"
+          },
+          "response": []
+        },
+        {
+          "name": "Search by Year Range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/search?minYear=1900&maxYear=1950&page=0&size=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "search"],
+              "query": [
+                {
+                  "key": "minYear",
+                  "value": "1900",
+                  "description": "Minimum publication year"
+                },
+                {
+                  "key": "maxYear",
+                  "value": "1950",
+                  "description": "Maximum publication year"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Page size"
+                }
+              ]
+            },
+            "description": "Search books by publication year range"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Available Books Only",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/search?isAvailable=true&page=0&size=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "search"],
+              "query": [
+                {
+                  "key": "isAvailable",
+                  "value": "true",
+                  "description": "Show only available books"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Page size"
+                }
+              ]
+            },
+            "description": "Search only available books"
+          },
+          "response": []
+        },
+        {
+          "name": "Legacy Search by Title",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/search/title?title=Quixote",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "search", "title"],
+              "query": [
+                {
+                  "key": "title",
+                  "value": "Quixote",
+                  "description": "Title to search for"
+                }
+              ]
+            },
+            "description": "Legacy endpoint for searching by title (returns list, not paginated)"
+          },
+          "response": []
+        },
+        {
+          "name": "Legacy Search by Author",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/search/author?author=Cervantes",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "search", "author"],
+              "query": [
+                {
+                  "key": "author",
+                  "value": "Cervantes",
+                  "description": "Author to search for"
+                }
+              ]
+            },
+            "description": "Legacy endpoint for searching by author (returns list, not paginated)"
+          },
+          "response": []
+        }
+      ],
+      "description": "Advanced search and discovery capabilities"
     },
     {
-      "name": "Search Books by Title",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/api/books/search?title=Quixote",
-          "host": ["{{base_url}}"],
-          "path": ["api", "books", "search"],
-          "query": [
+      "name": "Statistics & Analytics",
+      "item": [
+        {
+          "name": "Get Book Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/statistics",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "statistics"]
+            },
+            "description": "Retrieves comprehensive statistics about the book catalog including:\n- Total number of books\n- Number of available books\n- Average price\n- Oldest and newest publication years"
+          },
+          "response": []
+        }
+      ],
+      "description": "Analytics and statistics endpoints"
+    },
+    {
+      "name": "Validation Tests",
+      "item": [
+        {
+          "name": "Validation - Empty Title",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"\",\n  \"author\": \"Test Author\",\n  \"publicationYear\": 2000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"]
+            },
+            "description": "Tests validation with empty title - should return 400 error with detailed validation messages"
+          },
+          "response": []
+        },
+        {
+          "name": "Validation - Missing Author",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test Book\",\n  \"publicationYear\": 2000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"]
+            },
+            "description": "Tests validation with missing author - should return 400 error"
+          },
+          "response": []
+        },
+        {
+          "name": "Validation - Invalid Year (Too Old)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test Book\",\n  \"author\": \"Test Author\",\n  \"publicationYear\": 999\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"]
+            },
+            "description": "Tests validation with year before 1000 - should return 400 error"
+          },
+          "response": []
+        },
+        {
+          "name": "Validation - Invalid Year (Future)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test Book\",\n  \"author\": \"Test Author\",\n  \"publicationYear\": 2030\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"]
+            },
+            "description": "Tests validation with future year - should return 400 error"
+          },
+          "response": []
+        },
+        {
+          "name": "Validation - Invalid Title Pattern",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test@Book#123\",\n  \"author\": \"Test Author\",\n  \"publicationYear\": 2000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"]
+            },
+            "description": "Tests validation with invalid characters in title - should return 400 error"
+          },
+          "response": []
+        },
+        {
+          "name": "Validation - Invalid Author Pattern",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test Book\",\n  \"author\": \"Test@Author#123\",\n  \"publicationYear\": 2000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"]
+            },
+            "description": "Tests validation with invalid characters in author name - should return 400 error"
+          },
+          "response": []
+        },
+        {
+          "name": "Validation - Invalid Page Count",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test Book\",\n  \"author\": \"Test Author\",\n  \"publicationYear\": 2000,\n  \"pageCount\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"]
+            },
+            "description": "Tests validation with invalid page count - should return 400 error"
+          },
+          "response": []
+        },
+        {
+          "name": "Validation - Invalid Price",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test Book\",\n  \"author\": \"Test Author\",\n  \"publicationYear\": 2000,\n  \"price\": -10.00\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"]
+            },
+            "description": "Tests validation with negative price - should return 400 error"
+          },
+          "response": []
+        },
+        {
+          "name": "Validation - Too Long Description",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test Book\",\n  \"author\": \"Test Author\",\n  \"publicationYear\": 2000,\n  \"description\": \"This is a very long description that exceeds the maximum allowed length of 1000 characters. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"]
+            },
+            "description": "Tests validation with description exceeding 1000 characters - should return 400 error"
+          },
+          "response": []
+        }
+      ],
+      "description": "Comprehensive validation testing scenarios"
+    },
+    {
+      "name": "Error Handling Tests",
+      "item": [
+        {
+          "name": "Get Non-existent Book (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/99999",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "99999"]
+            },
+            "description": "Tests getting a book that doesn't exist - should return 404 with structured error response"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Non-existent Book (404)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Non-existent Book\",\n  \"author\": \"Unknown Author\",\n  \"publicationYear\": 2000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books/99999",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "99999"]
+            },
+            "description": "Tests updating a book that doesn't exist - should return 404"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Non-existent Book (404)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/99999",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "99999"]
+            },
+            "description": "Tests deleting a book that doesn't exist - should return 404"
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Availability Non-existent Book (404)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books/99999/availability",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books", "99999", "availability"]
+            },
+            "description": "Tests toggling availability for a book that doesn't exist - should return 404"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Duplicate Book (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"The Great Gatsby\",\n  \"author\": \"F. Scott Fitzgerald\",\n  \"publicationYear\": 1925\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"]
+            },
+            "description": "Tests creating a duplicate book (same title and author) - should return 409 conflict"
+          },
+          "response": []
+        },
+        {
+          "name": "Malformed JSON (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test Book\",\n  \"author\": \"Test Author\",\n  \"publicationYear\": 2000,\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"]
+            },
+            "description": "Tests with malformed JSON (trailing comma) - should return 400 error"
+          },
+          "response": []
+        },
+        {
+          "name": "Invalid HTTP Method (405)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "books"]
+            },
+            "description": "Tests with invalid HTTP method on collection endpoint - should return 405 Method Not Allowed"
+          },
+          "response": []
+        }
+      ],
+      "description": "Error handling and edge case testing"
+    },
+    {
+      "name": "Sample Data Creation",
+      "item": [
+        {
+          "name": "Create Sample Books - Batch 1",
+          "item": [
             {
-              "key": "title",
-              "value": "Quixote",
-              "description": "Title or part of the title to search for"
+              "name": "Create Book 1 - Don Quixote",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Don Quixote\",\n  \"author\": \"Miguel de Cervantes\",\n  \"publicationYear\": 1605,\n  \"description\": \"A classic Spanish novel about the adventures of Don Quixote and his squire Sancho Panza\",\n  \"genre\": \"Fiction\",\n  \"pageCount\": 863,\n  \"price\": 19.99\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/books",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "books"]
+                },
+                "description": "Creates Don Quixote book"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Book 2 - 1984",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"1984\",\n  \"author\": \"George Orwell\",\n  \"publicationYear\": 1949,\n  \"description\": \"A dystopian social science fiction novel about totalitarian control\",\n  \"genre\": \"Science Fiction\",\n  \"pageCount\": 328,\n  \"price\": 14.99\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/books",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "books"]
+                },
+                "description": "Creates 1984 book"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Book 3 - To Kill a Mockingbird",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"To Kill a Mockingbird\",\n  \"author\": \"Harper Lee\",\n  \"publicationYear\": 1960,\n  \"description\": \"A novel about racial injustice and childhood innocence in the American South\",\n  \"genre\": \"Fiction\",\n  \"pageCount\": 281,\n  \"price\": 13.99\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/books",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "books"]
+                },
+                "description": "Creates To Kill a Mockingbird book"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Book 4 - Pride and Prejudice",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Pride and Prejudice\",\n  \"author\": \"Jane Austen\",\n  \"publicationYear\": 1813,\n  \"description\": \"A romantic novel about manners, upbringing, morality, education, and marriage\",\n  \"genre\": \"Romance\",\n  \"pageCount\": 432,\n  \"price\": 11.99\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/books",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "books"]
+                },
+                "description": "Creates Pride and Prejudice book"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Book 5 - The Catcher in the Rye",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"The Catcher in the Rye\",\n  \"author\": \"J.D. Salinger\",\n  \"publicationYear\": 1951,\n  \"description\": \"A coming-of-age story about teenage rebellion and alienation\",\n  \"genre\": \"Fiction\",\n  \"pageCount\": 277,\n  \"price\": 12.99\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/books",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "books"]
+                },
+                "description": "Creates The Catcher in the Rye book"
+              },
+              "response": []
             }
-          ]
-        },
-        "description": "Searches for books containing the specified title"
-      },
-      "response": []
-    },
-    {
-      "name": "Create New Book",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"title\": \"Don Quixote\",\n  \"author\": \"Miguel de Cervantes\",\n  \"publicationYear\": 1605\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{base_url}}/api/books",
-          "host": ["{{base_url}}"],
-          "path": ["api", "books"]
-        },
-        "description": "Creates a new book in the catalog\n\nValidations:\n- title: Required, cannot be blank\n- author: Required, cannot be blank\n- publicationYear: Required, must be 1000 or greater"
-      },
-      "response": []
-    },
-    {
-      "name": "Create Book - The Great Gatsby",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"title\": \"The Great Gatsby\",\n  \"author\": \"F. Scott Fitzgerald\",\n  \"publicationYear\": 1925\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{base_url}}/api/books",
-          "host": ["{{base_url}}"],
-          "path": ["api", "books"]
-        },
-        "description": "Creates another example book"
-      },
-      "response": []
-    },
-    {
-      "name": "Create Book - 100 Years of Solitude",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"title\": \"One Hundred Years of Solitude\",\n  \"author\": \"Gabriel García Márquez\",\n  \"publicationYear\": 1967\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{base_url}}/api/books",
-          "host": ["{{base_url}}"],
-          "path": ["api", "books"]
-        },
-        "description": "Creates another example book"
-      },
-      "response": []
-    },
-    {
-      "name": "Update Book",
-      "request": {
-        "method": "PUT",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"title\": \"Don Quixote de la Mancha\",\n  \"author\": \"Miguel de Cervantes Saavedra\",\n  \"publicationYear\": 1605\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{base_url}}/api/books/1",
-          "host": ["{{base_url}}"],
-          "path": ["api", "books", "1"]
-        },
-        "description": "Updates an existing book by its ID"
-      },
-      "response": []
-    },
-    {
-      "name": "Delete Book",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/api/books/1",
-          "host": ["{{base_url}}"],
-          "path": ["api", "books", "1"]
-        },
-        "description": "Deletes a book by its ID"
-      },
-      "response": []
-    },
-    {
-      "name": "Test Validation - Empty Title",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"title\": \"\",\n  \"author\": \"Test Author\",\n  \"publicationYear\": 2000\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{base_url}}/api/books",
-          "host": ["{{base_url}}"],
-          "path": ["api", "books"]
-        },
-        "description": "Tests validation with empty title - should return 400 error"
-      },
-      "response": []
-    },
-    {
-      "name": "Test Validation - Invalid Year",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"title\": \"Test Book\",\n  \"author\": \"Test Author\",\n  \"publicationYear\": 999\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{base_url}}/api/books",
-          "host": ["{{base_url}}"],
-          "path": ["api", "books"]
-        },
-        "description": "Tests validation with invalid year - should return 400 error"
-      },
-      "response": []
-    },
-    {
-      "name": "Get Non-existent Book",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/api/books/999",
-          "host": ["{{base_url}}"],
-          "path": ["api", "books", "999"]
-        },
-        "description": "Tests getting a book that doesn't exist - should return 404"
-      },
-      "response": []
-    },
-    {
-      "name": "Delete Non-existent Book",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/api/books/999",
-          "host": ["{{base_url}}"],
-          "path": ["api", "books", "999"]
-        },
-        "description": "Tests deleting a book that doesn't exist - should return 404"
-      },
-      "response": []
+          ],
+          "description": "Creates a set of sample books for testing"
+        }
+      ],
+      "description": "Sample data creation for testing purposes"
     }
   ],
   "event": [
@@ -271,14 +1076,32 @@
       "listen": "prerequest",
       "script": {
         "type": "text/javascript",
-        "exec": [""]
+        "exec": [
+          "// Global pre-request script",
+          "console.log('Making request to: ' + pm.request.url);"
+        ]
       }
     },
     {
       "listen": "test",
       "script": {
         "type": "text/javascript",
-        "exec": [""]
+        "exec": [
+          "// Global test script",
+          "pm.test('Response time is less than 5000ms', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+          "});",
+          "",
+          "pm.test('Response has proper content type', function () {",
+          "    if (pm.response.headers.get('Content-Type')) {",
+          "        pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+          "    }",
+          "});",
+          "",
+          "// Log response for debugging",
+          "console.log('Response Status: ' + pm.response.status);",
+          "console.log('Response Time: ' + pm.response.responseTime + 'ms');"
+        ]
       }
     }
   ],
@@ -288,6 +1111,12 @@
       "value": "http://localhost:8081",
       "type": "string",
       "description": "Base URL for the API"
+    },
+    {
+      "key": "api_version",
+      "value": "v2.0",
+      "type": "string",
+      "description": "API version"
     }
   ]
 }
